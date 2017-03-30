@@ -1,1 +1,102 @@
 
+public class MainActivity extends AppCompatActivity {
+
+    private DatePicker datePicker;
+    private Calendar calendar;
+    private TextView dateView;
+    private int year, month, day;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        final ArrayList<String> Namelist = new ArrayList<String>();
+        final ArrayList<String> Datelist = new ArrayList<String>();
+        final Intent i = new Intent(getApplicationContext(), Main2Activity.class);
+        final EditText e = (EditText) findViewById(R.id.editText);
+        Button b1 = (Button) findViewById(R.id.button);
+        Button b2 = (Button) findViewById(R.id.button2);
+        Button b3 = (Button) findViewById(R.id.button3);
+        final DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
+
+        b1.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                String name= e.getText().toString();
+                int   day  = datePicker.getDayOfMonth();
+                int   month= datePicker.getMonth();
+                int   year = datePicker.getYear();
+
+                String date=Integer.toString(day)+Integer.toString(month)+Integer.toString(year);
+                Namelist.add(name);
+                Datelist.add(date);
+            }
+        });
+
+        b2.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                e.setText("Name");
+            }
+        });
+
+        b3.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                i.putExtra("1",Namelist);
+                i.putExtra("2",Datelist);
+                startActivity(i);
+            }
+        });
+    }
+}
+
+
+protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+         ArrayList<String> Namelist = new ArrayList<String>();
+         ArrayList<String> Datelist = new ArrayList<String>();
+        final ArrayList<Integer> indices = new ArrayList<Integer>();
+        final TextView t = (TextView) findViewById(R.id.textView);
+        final String[] display = {""};
+        final DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker2);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            Namelist = extras.getStringArrayList("1");
+            Datelist = extras.getStringArrayList("2");
+
+        }
+        Button b1 = (Button) findViewById(R.id.button4);
+        final ArrayList<String> finalDatelist = Datelist;
+        final ArrayList<String> finalNamelist = Namelist;
+        b1.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                display[0]="";
+                int   day  = datePicker.getDayOfMonth();
+                int   month= datePicker.getMonth();
+                int   year = datePicker.getYear();
+
+                String date=Integer.toString(day)+Integer.toString(month)+Integer.toString(year);
+                for(int i =0 ; i< finalDatelist.size();i++){
+                    if(finalDatelist.get(i).equals(date)) {
+                        display[0] = display[0] + finalNamelist.get(i) + " ";
+                    }
+                }
+                if(!display[0].equals("")){
+                    t.setText(display[0]);
+                }
+                else{
+                    t.setText("No people found");
+                }
+            }
+        });
+
+    }
+}
